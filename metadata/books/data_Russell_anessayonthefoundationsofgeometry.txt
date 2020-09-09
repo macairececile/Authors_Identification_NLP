@@ -1,0 +1,3 @@
+Title: An essay on the foundations of geometry
+Author: Bertrand Russell
+Language: English

@@ -1,0 +1,47 @@
+import os
+import nltk
+from nltk.collocations import *
+from nltk.tokenize import word_tokenize
+
+def number_of_paragraphs(lines):
+    tmp = []
+    ind = 0
+    index = 0
+    for ind in range(ind, len(lines)):
+        if lines[ind] != '\n':
+            if len(tmp) <= index:
+                tmp.append(0)
+            else:
+                tmp[index] += 1
+            ind += 1
+        else:
+            if len(tmp) == index:
+                tmp.append(0)
+            if tmp[index] == 0:
+                if not lines[ind - 1].endswith('.') or not lines[ind - 1].endswith('!') or not lines[ind - 1].endswith(
+                        '?') or \
+                        not lines[ind - 1].endswith('"') or \
+                        not lines[ind - 1].endswith('\''):
+                    tmp[index] = 'title'
+            index += 1
+    final_array = [x for x in tmp if x != 'title']
+    return len(final_array)
+
+def colocations(text):
+    """find collocations in text"""
+    tokens = word_tokenize(text)
+    bigram_measures = nltk.collocations.BigramAssocMeasures()
+    finder = BigramCollocationFinder.from_words(tokens)
+    print(finder.nbest(bigram_measures.pmi, 20))
+
+
+path = '/home/cecile/Bureau/scriptNLP/texts/'
+if __name__ == "__main__":
+    for filename in os.listdir(path):
+        with open('/home/cecile/Bureau/scriptNLP/texts/' + filename, 'r') as file:
+            lines = file.readlines()
+            print(number_of_paragraphs(lines))
+            string = ''
+            for i in lines:
+                string += i
+            colocations(string)
